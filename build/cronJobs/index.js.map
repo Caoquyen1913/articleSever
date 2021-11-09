@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/cronJobs/index.js"],"names":[],"mappings":";;AAAA","sourcesContent":["import \"./article/article.cronjob\""],"file":"index.js"}
