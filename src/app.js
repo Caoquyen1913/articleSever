@@ -2,7 +2,6 @@ import express from 'express';
 import mongooseConfig from './config/mongoose.config';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import redis from 'redis';
 import './cronJobs';
 import responseHandle from './utils/responseHandle';
 import bodyParser from 'body-parser';
@@ -11,7 +10,6 @@ import { HttpStatusCode } from './const/httpCode';
 import {limiter} from "./config/rateLimit.config"
 dotenv.config();
 const app = express();
-const redisClient = redis.createClient(6379);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,8 +36,5 @@ app.all('*', (req, res) => {
 
 app.listen(PORT, async () => {
   await mongooseConfig.mongoConnect();
-  await redisClient.on('connect', () => {
-    console.log('connect redis');
-  });
   console.log('run port 5000');
 });
