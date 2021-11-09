@@ -27,6 +27,10 @@ const articleSchema = new Schema({
     description: {
         type: String
     },
+    like: {
+        type: Number,
+        min: 0
+    }
     // organization_id: {
     //     type: Number
     // }

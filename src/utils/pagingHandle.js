@@ -10,7 +10,7 @@ const paging = async ({
             .find(
                 query, selection, options
             )
-            .skip((page - 1) * limit)
+            .skip((page) * limit)
             .limit(+limit),
         model.countDocuments(query)
     ]);

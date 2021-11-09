@@ -1,11 +1,13 @@
 import articleModel from './article.model';
 import pagingHandle from '../../utils/pagingHandle';
-const getArticle = async (req, res, next) => {
+import responseHandle from '../../utils/responseHandle';
+import { HttpStatusCode } from '../../const/httpCode';
+const getArticle = async (req, res) => {
   try {
-    const { tags, dateStart, dateEnd, page, limit } = req.query;
+    let { tags, dateStart, dateEnd, page, limit, key } = req.query;
     dateStart = new Date(dateStart);
     dateEnd = new Date(dateEnd);
-    const query = { updatedAt: { $gte: fromDate, $lt: toDate } };
+    let query = { updatedAt: { $gte: dateStart, $lt: dateEnd } };
     if (tags)
       query = {
         ...query,
@@ -28,21 +30,79 @@ const getArticle = async (req, res, next) => {
       limit,
       options: {},
     });
+    return responseHandle.sendPaging(
+      res,
+      HttpStatusCode.OK,
+      {
+        message: 'get article success',
+        data: articles,
+      },
+      totalPages,
+      page
+    );
   } catch (error) {
-    return next(error);
+    return responseHandle.send(res, HttpStatusCode.INTERNAL_SERVER, {
+      errors: [
+        {
+          error: error.message,
+        },
+      ],
+    });
   }
 };
 
-const create = async (req, res, next) => {
-    try {
-        const article = await articleModel.create({
-            ...req.body,
-        })
-    } catch (error) {
-        return next(error)
-    }
-}
+const create = async (req, res) => {
+  try {
+    const article = await articleModel.create({
+      ...req.body,
+      like: 0,
+    });
+    return responseHandle.send(res, HttpStatusCode.OK, {
+      message: 'create article success',
+      data: article,
+    });
+  } catch (error) {
+    return responseHandle.send(res, HttpStatusCode.INTERNAL_SERVER, {
+      errors: [
+        {
+          error: error.message,
+        },
+      ],
+    });
+  }
+};
+
+const likeArticle = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedArticle = await articleModel.findOneAndUpdate(
+      {
+        _id: id,
+        published: true,
+      },
+      {
+        $inc: {
+          like: 1,
+        },
+      }
+    );
+    return responseHandle.send(res, HttpStatusCode.OK, {
+      message: 'like article success',
+      data: updatedArticle,
+    });
+  } catch (error) {
+    return responseHandle.send(res, HttpStatusCode.INTERNAL_SERVER, {
+      errors: [
+        {
+          error: error.message,
+        },
+      ],
+    });
+  }
+};
 
 export default {
-    getArticle
-}
+  getArticle,
+  create,
+  likeArticle
+};

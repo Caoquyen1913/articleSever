@@ -16,9 +16,12 @@ const validate = (schema, reqType) => {
           break;
       }
       if (result.error) {
-        const err = new Error(result.error);
-        err.statusCode = 400;
-        return next(err);
+        // const err = new Error(result.error);
+        // err.statusCode = 400;
+        // return next(err);
+        return res.json({
+          error: result.error
+        })
       }
 
       return next();
