@@ -14,10 +14,10 @@ const createSchema = Joi.object().keys({
 const getArticleSchema = Joi.object().keys({
   key: Joi.string().optional(),
   tags: Joi.array().items(Joi.string()).optional(),
-  page: Joi.number().min(0),
-  limit: Joi.number().min(0),
-  dateStart: Joi.string().isoDate(),
-  dateEnd: Joi.string().isoDate(),
+  page: Joi.number().min(0).optional(),
+  limit: Joi.number().min(0).optional(),
+  dateStart: Joi.string().isoDate().optional(),
+  dateEnd: Joi.string().isoDate().optional(),
 });
 
 export default {

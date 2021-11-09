@@ -1,13 +1,24 @@
 import articleModel from './article.model';
 import pagingHandle from '../../utils/pagingHandle';
 import responseHandle from '../../utils/responseHandle';
+import articleService from './article.service';
 import { HttpStatusCode } from '../../const/httpCode';
 const getArticle = async (req, res) => {
   try {
+    if (Object.keys(req.query).length === 0) {
+      console.log('here');
+      const articles = articleService.loadArticleData();
+      return responseHandle.send(res, HttpStatusCode.OK, {
+        data: articles,
+        message: 'get top 20 success',
+      });
+    }
     let { tags, dateStart, dateEnd, page, limit, key } = req.query;
     dateStart = new Date(dateStart);
     dateEnd = new Date(dateEnd);
-    let query = { updatedAt: { $gte: dateStart, $lt: dateEnd } };
+    let query = {};
+    if (dateStart && dateEnd)
+      query = { ...query, updatedAt: { $gte: dateStart, $lt: dateEnd } };
     if (tags)
       query = {
         ...query,
@@ -30,6 +41,7 @@ const getArticle = async (req, res) => {
       limit,
       options: {},
     });
+
     return responseHandle.sendPaging(
       res,
       HttpStatusCode.OK,
@@ -104,5 +116,5 @@ const likeArticle = async (req, res) => {
 export default {
   getArticle,
   create,
-  likeArticle
+  likeArticle,
 };

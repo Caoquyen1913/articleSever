@@ -11,6 +11,8 @@ var _pagingHandle = _interopRequireDefault(require("../../utils/pagingHandle"));
 
 var _responseHandle = _interopRequireDefault(require("../../utils/responseHandle"));
 
+var _article2 = _interopRequireDefault(require("./article.service"));
+
 var _httpCode = require("../../const/httpCode");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -23,40 +25,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 const getArticle = async (req, res) => {
   try {
-    let {
-      tags,
-      dateStart,
-      dateEnd,
-      page,
-      limit,
-      key
-    } = req.query;
-    dateStart = new Date(dateStart);
-    dateEnd = new Date(dateEnd);
-    let query = {
-      updatedAt: {
-        $gte: dateStart,
-        $lt: dateEnd
-      }
-    };
-    if (tags) query = _objectSpread(_objectSpread({}, query), {}, {
-      tags: {
-        $in: tags
-      }
-    });
-    if (key) query = _objectSpread(_objectSpread({}, query), {}, {
-      $text: {
-        $search: key
-      }
-    });
-    const [articles, totalPages] = await _pagingHandle.default.paging({
-      model: _article.default,
-      query,
-      selection: {},
-      page,
-      limit,
-      options: {}
-    });
+    if (!req.query) {
+      const articles = _article2.default.loadArticleData();
+    } else {
+      let {
+        tags,
+        dateStart,
+        dateEnd,
+        page,
+        limit,
+        key
+      } = req.query;
+      dateStart = new Date(dateStart);
+      dateEnd = new Date(dateEnd);
+      let query = {
+        updatedAt: {
+          $gte: dateStart,
+          $lt: dateEnd
+        }
+      };
+      if (tags) query = _objectSpread(_objectSpread({}, query), {}, {
+        tags: {
+          $in: tags
+        }
+      });
+      if (key) query = _objectSpread(_objectSpread({}, query), {}, {
+        $text: {
+          $search: key
+        }
+      });
+      const [articles, totalPages] = await _pagingHandle.default.paging({
+        model: _article.default,
+        query,
+        selection: {},
+        page,
+        limit,
+        options: {}
+      });
+    }
+
     return _responseHandle.default.sendPaging(res, _httpCode.HttpStatusCode.OK, {
       message: 'get article success',
       data: articles
