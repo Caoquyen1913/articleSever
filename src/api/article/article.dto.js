@@ -13,7 +13,10 @@ const createSchema = Joi.object().keys({
 
 const getArticleSchema = Joi.object().keys({
   key: Joi.string().optional(),
-  tags: Joi.array().items(Joi.string()).optional(),
+  tags: Joi.alternatives().try(
+    Joi.array().items(Joi.string()).optional(),
+    Joi.string()
+  ),
   page: Joi.number().min(0).optional(),
   limit: Joi.number().min(0).optional(),
   dateStart: Joi.string().isoDate().optional(),

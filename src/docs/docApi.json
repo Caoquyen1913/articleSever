@@ -94,10 +94,21 @@
           {
             "in": "query",
             "type": "array",
+            "collectionFormat": "multi",
             "items": {
               "type": "string"
             },
             "name": "tags"
+          },
+          {
+            "in": "query",
+            "name": "dateStart",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "dateEnd",
+            "type": "string"
           }
         ],
         "responses": {}
