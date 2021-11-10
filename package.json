@@ -31,7 +31,10 @@
     "express-rate-limit": "^5.5.1",
     "joi": "^17.4.2",
     "mongoose": "^6.0.12",
-    "node-cron": "^3.0.0"
+    "morgan": "^1.10.0",
+    "node-cron": "^3.0.0",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",

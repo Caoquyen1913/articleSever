@@ -1,0 +1,161 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "article",
+    "description": "",
+    "version": "1.0"
+  },
+  "basePath": "/api/v1",
+  "produces": ["application/json"],
+  "definitions": {
+    "article": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "published": {
+          "type": "boolean"
+        },
+        "body_markdown": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "series": {
+          "type": "string"
+        },
+        "main_image": {
+          "type": "string"
+        },
+        "canonical_url": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "user": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/article": {
+      "post": {
+        "tags": ["article"],
+        "summary": "API create article",
+        "parameters": [
+          {
+            "in": "body",
+            "required": true,
+            "name": "body",
+            "schema": {
+              "$ref": "#definitions/article"
+            }
+          }
+        ],
+        "responses": {}
+      },
+      "get": {
+        "tags": ["article"],
+        "summary": "API get article",
+        "parameters": [
+          {
+            "in": "query",
+            "type": "string",
+            "name": "key"
+          },
+          {
+            "in": "query",
+            "type": "number",
+            "name": "page"
+          },
+          {
+            "in": "query",
+            "type": "number",
+            "name": "limit"
+          },
+          {
+            "in": "query",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "name": "tags"
+          }
+        ],
+        "responses": {}
+      },
+      "put": {
+        "tags": ["article"],
+        "summary": "API like article",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/user/signin": {
+      "post": {
+        "tags": ["user"],
+        "summary": "API sign in new user",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#definitions/user"
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": ["user"],
+        "summary": "API get list user",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "wildcard",
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    }
+  }
+}
