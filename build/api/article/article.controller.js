@@ -25,45 +25,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 const getArticle = async (req, res) => {
   try {
-    if (!req.query) {
+    if (Object.keys(req.query).length === 0) {
+      console.log('here');
+
       const articles = _article2.default.loadArticleData();
-    } else {
-      let {
-        tags,
-        dateStart,
-        dateEnd,
-        page,
-        limit,
-        key
-      } = req.query;
-      dateStart = new Date(dateStart);
-      dateEnd = new Date(dateEnd);
-      let query = {
-        updatedAt: {
-          $gte: dateStart,
-          $lt: dateEnd
-        }
-      };
-      if (tags) query = _objectSpread(_objectSpread({}, query), {}, {
-        tags: {
-          $in: tags
-        }
-      });
-      if (key) query = _objectSpread(_objectSpread({}, query), {}, {
-        $text: {
-          $search: key
-        }
-      });
-      const [articles, totalPages] = await _pagingHandle.default.paging({
-        model: _article.default,
-        query,
-        selection: {},
-        page,
-        limit,
-        options: {}
+
+      return _responseHandle.default.send(res, _httpCode.HttpStatusCode.OK, {
+        data: articles,
+        message: 'get top 20 success'
       });
     }
 
+    let {
+      tags,
+      dateStart,
+      dateEnd,
+      page,
+      limit,
+      key
+    } = req.query;
+    dateStart = new Date(dateStart);
+    dateEnd = new Date(dateEnd);
+    let query = {};
+    if (dateStart && dateEnd) query = _objectSpread(_objectSpread({}, query), {}, {
+      updatedAt: {
+        $gte: dateStart,
+        $lt: dateEnd
+      }
+    });
+    if (tags) query = _objectSpread(_objectSpread({}, query), {}, {
+      tags: {
+        $in: tags
+      }
+    });
+    if (key) query = _objectSpread(_objectSpread({}, query), {}, {
+      $text: {
+        $search: key
+      }
+    });
+    const [articles, totalPages] = await _pagingHandle.default.paging({
+      model: _article.default,
+      query,
+      selection: {},
+      page,
+      limit,
+      options: {}
+    });
     return _responseHandle.default.sendPaging(res, _httpCode.HttpStatusCode.OK, {
       message: 'get article success',
       data: articles

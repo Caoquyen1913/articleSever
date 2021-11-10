@@ -23,10 +23,10 @@ const createSchema = _joi.default.object().keys({
 const getArticleSchema = _joi.default.object().keys({
   key: _joi.default.string().optional(),
   tags: _joi.default.array().items(_joi.default.string()).optional(),
-  page: _joi.default.number().min(0),
-  limit: _joi.default.number().min(0),
-  dateStart: _joi.default.string().isoDate(),
-  dateEnd: _joi.default.string().isoDate()
+  page: _joi.default.number().min(0).optional(),
+  limit: _joi.default.number().min(0).optional(),
+  dateStart: _joi.default.string().isoDate().optional(),
+  dateEnd: _joi.default.string().isoDate().optional()
 });
 
 var _default = {
