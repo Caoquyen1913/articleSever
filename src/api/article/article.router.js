@@ -6,14 +6,15 @@ const router = express.Router();
 
 router.get(
   '/',
-  validationHandle.validate(articleDto.getArticleSchema, 'query'),
-  articleController.getArticle
+  validationHandle.validator(articleDto.getArticle, 'query'),
+  articleController.getArticleAxios
 );
 
 router.post(
   '/',
-  validationHandle.validate(articleDto.createSchema, 'body'),
-  articleController.create
+  // validationHandle.validate(articleDto.createSchema, 'body'),
+  validationHandle.validator(articleDto.createArticle, 'body'),
+  articleController.createArticleAxios
 );
 
 router.put(

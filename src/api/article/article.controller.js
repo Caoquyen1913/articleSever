@@ -3,6 +3,7 @@ import pagingHandle from '../../utils/pagingHandle';
 import responseHandle from '../../utils/responseHandle';
 import articleService from './article.service';
 import { HttpStatusCode } from '../../const/httpCode';
+import articlesApiService from '../../service/articlesApi/articlesApi.service';
 const getArticle = async (req, res) => {
   try {
     if (Object.keys(req.query).length === 0) {
@@ -113,8 +114,58 @@ const likeArticle = async (req, res) => {
   }
 };
 
+const getArticleAxios = async (req, res) => {
+  try {
+    if (Object.keys(req.query).length === 0) {
+      console.log('here');
+      const articles = articleService.loadArticleData();
+      return responseHandle.send(res, HttpStatusCode.OK, {
+        data: articles,
+        message: 'get top 20 success',
+      });
+    }
+    const { page, per_page, tag, dateStart, dateEnd } = req.query;
+    let params = {};
+    if (page && per_page) params = { ...params, page, per_page };
+    if (tag) params = { ...params, tag };
+    const articles = await articlesApiService.getArticles({ params });
+    return responseHandle.send(res, HttpStatusCode.OK, {
+      message: 'get articles success',
+      data: articles.result,
+    });
+  } catch (error) {
+    return responseHandle.send(res, HttpStatusCode.INTERNAL_SERVER, {
+      errors: [
+        {
+          error: error.message,
+        },
+      ],
+    });
+  }
+};
+
+const createArticleAxios = async (req, res) => {
+  try {
+    const {result, status} = await articlesApiService.createArticle(req.body, {});
+    console.log(result)
+    return responseHandle.send(res, status, {
+      data: result,
+    });
+  } catch (error) {
+    return responseHandle.send(res, HttpStatusCode.INTERNAL_SERVER, {
+      errors: [
+        {
+          error: error.message,
+        },
+      ],
+    });
+  }
+};
+
 export default {
   getArticle,
   create,
   likeArticle,
+  getArticleAxios,
+  createArticleAxios,
 };
