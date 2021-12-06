@@ -5,11 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _express = _interopRequireDefault(require("express"));
+
 var _article = _interopRequireDefault(require("./article/article.router"));
 
 var _user = _interopRequireDefault(require("./user/user.router"));
-
-var _express = _interopRequireDefault(require("express"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

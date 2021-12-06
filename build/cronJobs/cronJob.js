@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.cronJob = void 0;
+exports.default = void 0;
 
 var _nodeCron = _interopRequireDefault(require("node-cron"));
 
@@ -16,5 +16,8 @@ const cronJob = (time, job) => {
   });
 };
 
-exports.cronJob = cronJob;
+var _default = {
+  cronJob
+};
+exports.default = _default;
 //# sourceMappingURL=cronJob.js.map

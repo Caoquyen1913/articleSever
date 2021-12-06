@@ -15,6 +15,8 @@ var _article2 = _interopRequireDefault(require("./article.service"));
 
 var _httpCode = require("../../const/httpCode");
 
+var _articlesApi = _interopRequireDefault(require("../../service/articlesApi/articlesApi.service"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -37,9 +39,11 @@ const getArticle = async (req, res) => {
     }
 
     let {
-      tags,
       dateStart,
-      dateEnd,
+      dateEnd
+    } = req.query;
+    const {
+      tags,
       page,
       limit,
       key
@@ -47,22 +51,32 @@ const getArticle = async (req, res) => {
     dateStart = new Date(dateStart);
     dateEnd = new Date(dateEnd);
     let query = {};
-    if (dateStart && dateEnd) query = _objectSpread(_objectSpread({}, query), {}, {
-      updatedAt: {
-        $gte: dateStart,
-        $lt: dateEnd
-      }
-    });
-    if (tags) query = _objectSpread(_objectSpread({}, query), {}, {
-      tags: {
-        $in: tags
-      }
-    });
-    if (key) query = _objectSpread(_objectSpread({}, query), {}, {
-      $text: {
-        $search: key
-      }
-    });
+
+    if (dateStart && dateEnd) {
+      query = _objectSpread(_objectSpread({}, query), {}, {
+        updatedAt: {
+          $gte: dateStart,
+          $lt: dateEnd
+        }
+      });
+    }
+
+    if (tags) {
+      query = _objectSpread(_objectSpread({}, query), {}, {
+        tags: {
+          $in: tags
+        }
+      });
+    }
+
+    if (key) {
+      query = _objectSpread(_objectSpread({}, query), {}, {
+        $text: {
+          $search: key
+        }
+      });
+    }
+
     const [articles, totalPages] = await _pagingHandle.default.paging({
       model: _article.default,
       query,
@@ -71,10 +85,10 @@ const getArticle = async (req, res) => {
       limit,
       options: {}
     });
-    return _responseHandle.default.sendPaging(res, _httpCode.HttpStatusCode.OK, {
+    return _responseHandle.default.sendPaging(res, _httpCode.HttpStatusCode.OK, totalPages, page, {
       message: 'get article success',
       data: articles
-    }, totalPages, page);
+    });
   } catch (error) {
     return _responseHandle.default.send(res, _httpCode.HttpStatusCode.INTERNAL_SERVER, {
       errors: [{
@@ -128,10 +142,95 @@ const likeArticle = async (req, res) => {
   }
 };
 
+const getArticleAxios = async (req, res) => {
+  try {
+    if (Object.keys(req.query).length === 0) {
+      console.log('here');
+
+      const articles = _article2.default.loadArticleData();
+
+      return _responseHandle.default.send(res, _httpCode.HttpStatusCode.OK, {
+        data: articles.result,
+        message: 'get top 20 success'
+      });
+    }
+
+    const {
+      page,
+      per_page,
+      tag
+    } = req.query;
+    let params = {};
+
+    if (page && per_page) {
+      params = _objectSpread(_objectSpread({}, params), {}, {
+        page,
+        per_page
+      });
+    }
+
+    if (tag) params = _objectSpread(_objectSpread({}, params), {}, {
+      tag
+    });
+    const articles = await _articlesApi.default.getArticles({
+      params
+    });
+    return _responseHandle.default.send(res, _httpCode.HttpStatusCode.OK, {
+      message: 'get articles success',
+      data: articles.result
+    });
+  } catch (error) {
+    return _responseHandle.default.send(res, _httpCode.HttpStatusCode.INTERNAL_SERVER, {
+      errors: [{
+        error: error.message
+      }]
+    });
+  }
+};
+
+const createArticleAxios = async (req, res) => {
+  try {
+    const {
+      result,
+      status
+    } = await _articlesApi.default.createArticle(req.body, {});
+    return _responseHandle.default.send(res, status, {
+      data: result
+    });
+  } catch (error) {
+    return _responseHandle.default.send(res, _httpCode.HttpStatusCode.INTERNAL_SERVER, {
+      errors: [{
+        error: error.message
+      }]
+    });
+  }
+};
+
+const getArticleOfMeAxios = async (req, res) => {
+  try {
+    const {
+      result,
+      status
+    } = await _articlesApi.default.getArticleOfMe({});
+    return _responseHandle.default.send(res, status, {
+      data: result
+    });
+  } catch (error) {
+    return _responseHandle.default.send(res, _httpCode.HttpStatusCode.INTERNAL_SERVER, {
+      errors: [{
+        error: error.message
+      }]
+    });
+  }
+};
+
 var _default = {
   getArticle,
   create,
-  likeArticle
+  likeArticle,
+  getArticleAxios,
+  createArticleAxios,
+  getArticleOfMeAxios
 };
 exports.default = _default;
 //# sourceMappingURL=article.controller.js.map

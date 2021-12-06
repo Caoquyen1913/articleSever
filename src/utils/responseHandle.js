@@ -1,17 +1,17 @@
 const send = (res, httpCode, response = {}) => {
-  return httpCode === 200 || httpCode === 201? res.status(httpCode).json({
+  return httpCode === 200 || httpCode === 201 ? res.status(httpCode).json({
     data: response.data ? response.data : null,
     message: response.message,
-    timestamps: Date.now()
-  }): res.status(httpCode).json({
+    timestamps: Date.now(),
+  }) : res.status(httpCode).json({
     errors: response.errors,
     error: response.data,
     message: response.message,
-    timestamps: Date.now()
-  })
+    timestamps: Date.now(),
+  });
 };
 
-const sendPaging = (res, httpCode, response = {}, totalPage, page) => {
+const sendPaging = (res, httpCode, totalPage, page, response = {}) => {
   return res.status(httpCode).json({
     data: response.data ? response.data : null,
     message: response.message,
@@ -22,5 +22,5 @@ const sendPaging = (res, httpCode, response = {}, totalPage, page) => {
 
 export default {
   send,
-  sendPaging
+  sendPaging,
 };

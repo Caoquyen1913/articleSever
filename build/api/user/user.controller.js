@@ -5,9 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _user = _interopRequireDefault(require("./user.model"));
-
 var _bcrypt = _interopRequireDefault(require("bcrypt"));
+
+var _user = _interopRequireDefault(require("./user.model"));
 
 var _responseHandle = _interopRequireDefault(require("../../utils/responseHandle"));
 
@@ -60,31 +60,37 @@ const getUser = async (req, res) => {
       wildcard
     } = req.query;
     let query = {};
-    if (wildcard) query = _objectSpread(_objectSpread({}, query), {}, {
-      $or: [{
-        name: {
-          $regex: new RegExp('(' + wildcard.toString().toLowerCase() + ')\\w+', 'i')
-        }
-      }, {
-        name: {
-          $regex: new RegExp('(' + wildcard.toString().toUpperCase() + ')\\w+', 'i')
-        }
-      }]
-    });
+
+    if (wildcard) {
+      query = _objectSpread(_objectSpread({}, query), {}, {
+        $or: [{
+          name: {
+            $regex: new RegExp(`(${wildcard.toString().toLowerCase()})\\w+`, 'i')
+          }
+        }, {
+          name: {
+            $regex: new RegExp(`( ${wildcard.toString().toUpperCase()} )\\w+`, 'i')
+          }
+        }]
+      });
+    }
 
     if (name) {
       query = _objectSpread(_objectSpread({}, query), {}, {
         name: {
-          $regex: new RegExp('(' + name + ')\\w+', 'i')
+          $regex: new RegExp(`(${name})\\w+`, 'i')
         }
       });
     }
 
-    if (username) query = _objectSpread(_objectSpread({}, query), {}, {
-      username: {
-        $regex: new RegExp('(' + username + ')\\w+', 'i')
-      }
-    });
+    if (username) {
+      query = _objectSpread(_objectSpread({}, query), {}, {
+        username: {
+          $regex: new RegExp(`( ${username})\\w+`, 'i')
+        }
+      });
+    }
+
     const listUser = await _user.default.find(query).sort({
       name: 1
     }).select('-password -isActive');

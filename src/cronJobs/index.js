@@ -1,1 +1,1 @@
-import "./article/article.cronjob"
+import "./article/article.cronjob";

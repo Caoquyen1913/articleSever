@@ -1,6 +1,6 @@
 import axios from '../config/axios.config';
 import { METHOD } from '../service/articlesApi/articlesApi.const';
-import responseHandle from './responseHandle';
+// import responseHandle from './responseHandle';
 // const callAPI = async ({ url, method, data, options }) => {
 //   try {
 //     let result = {};
@@ -45,8 +45,13 @@ import responseHandle from './responseHandle';
 //   }
 // };
 
-const callAPI = ({ url, method, data, options }) => {
-  let result = {};
+const callAPI = ({
+  url,
+  method,
+  data,
+  options,
+}) => {
+  // let result;
   switch (method) {
     case METHOD.POST:
       console.log('here');
@@ -64,11 +69,11 @@ const callAPI = ({ url, method, data, options }) => {
             };
           }
         });
-      // result = JSON.parse(result);
-      console.log('result', result);
-      // console.log(JSON.parse(JSON.stringify(response.data)));
-      // result = JSON.parse(JSON.stringify(response));
-      break;
+    // result = JSON.parse(result);
+    // console.log('result', result);
+    // console.log(JSON.parse(JSON.stringify(response.data)));
+    // result = JSON.parse(JSON.stringify(response));
+    // break;
     case METHOD.PUT:
       return axios
         .put(url, data, options)
@@ -83,7 +88,7 @@ const callAPI = ({ url, method, data, options }) => {
             };
           }
         });
-      break;
+    // break;
     case METHOD.DELETE:
       return axios
         .delete(url, options)
@@ -98,7 +103,7 @@ const callAPI = ({ url, method, data, options }) => {
             };
           }
         });
-      break;
+    // break;
     default:
       return axios
         .get(url, options)
@@ -113,18 +118,18 @@ const callAPI = ({ url, method, data, options }) => {
             };
           }
         });
-      break;
+    // break;
   }
   // console.log('result', result.status);
-  if (result.response)
-    return responseHandle.send(result.status, {
-      errors: [
-        {
-          error: result.error,
-        },
-      ],
-    });
-  return result.data;
+  // if (result.response)
+  //   return responseHandle.send(result.status, {
+  //     errors: [
+  //       {
+  //         error: result.error,
+  //       },
+  //     ],
+  //   });
+  // return result.data;
 };
 
-export { callAPI };
+export default { callAPI };

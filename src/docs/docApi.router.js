@@ -2,6 +2,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import express from 'express';
 import swaggerDocument from './docApi.json';
+
 const router = express.Router();
 
 const swaggerOptions = {

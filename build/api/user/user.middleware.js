@@ -22,11 +22,15 @@ const signIn = async (req, res, next) => {
       username,
       isActive: true
     });
-    if (user) return _responseHandle.default.send(res, _httpCode.HttpStatusCode.CONFLIC, {
-      errors: [{
-        error: 'username already existed'
-      }]
-    });
+
+    if (user) {
+      return _responseHandle.default.send(res, _httpCode.HttpStatusCode.CONFLIC, {
+        errors: [{
+          error: 'username already existed'
+        }]
+      });
+    }
+
     return next();
   } catch (error) {
     return _responseHandle.default.send(res, _httpCode.HttpStatusCode.CONFLIC, {

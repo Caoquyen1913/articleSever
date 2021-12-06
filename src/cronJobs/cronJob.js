@@ -7,6 +7,6 @@ const cronJob = (time, job) => {
   });
 };
 
-export {
+export default {
   cronJob,
 };

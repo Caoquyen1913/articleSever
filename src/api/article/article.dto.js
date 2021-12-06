@@ -27,13 +27,13 @@
 //   getArticleSchema,
 // };
 
-const getArticle ={
+const getArticle = {
   page: "integer|min:1",
   per_page: "integer|min:1",
   tag: "string",
   dateStart: "string",
-  dateEnd: "string"
-}
+  dateEnd: "string",
+};
 
 const createArticle = {
   article: {
@@ -41,11 +41,11 @@ const createArticle = {
     published: "boolean",
     body_markdown: "string",
     tags: "array",
-    series: "string"
-  }
-}
+    series: "string",
+  },
+};
 
 export default {
   getArticle,
-  createArticle
-}
+  createArticle,
+};

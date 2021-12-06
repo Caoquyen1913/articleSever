@@ -9,7 +9,7 @@ const signIn = async (req, res, next) => {
       username,
       isActive: true,
     });
-    if (user)
+    if (user) {
       return responseHandle.send(res, HttpStatusCode.CONFLIC, {
         errors: [
           {
@@ -17,7 +17,8 @@ const signIn = async (req, res, next) => {
           },
         ],
       });
-    return next()
+    }
+    return next();
   } catch (error) {
     return responseHandle.send(res, HttpStatusCode.CONFLIC, {
       errors: [
@@ -30,5 +31,5 @@ const signIn = async (req, res, next) => {
 };
 
 export default {
-  signIn
-}
+  signIn,
+};

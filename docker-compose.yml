@@ -1,0 +1,51 @@
+version: '3'
+networks:
+  sv-networks:
+    driver: bridge
+services:
+  web:
+    container_name: article
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    restart: always
+    networks:
+      - sv-networks
+
+    # environment:
+    #   DB_HOST: mongo
+    #   DB_USER: root
+    #   DB_PASSWORD: abc123
+    #   DB_NAME: article
+    #   DB_PORT: 27017
+
+  mongo:
+    image: mongo
+    restart: always
+    networks:
+      - sv-networks
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: abc123
+      MONGO_INITDB_DATABASE: article
+
+  
+  mongo-express:
+    image: mongo-express
+    restart: always
+    networks:
+      - sv-networks
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
+      ME_CONFIG_MONGODB_AUTH_USERNAME: root
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: abc123
+    depends_on:
+      - mongo

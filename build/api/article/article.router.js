@@ -17,8 +17,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const router = _express.default.Router();
 
-router.get('/', _validationHandle.default.validate(_article2.default.getArticleSchema, 'query'), _article.default.getArticle);
-router.post('/', _validationHandle.default.validate(_article2.default.createSchema, 'body'), _article.default.create);
+router.get('/me', _article.default.getArticleOfMeAxios);
+router.get('/', _validationHandle.default.validator(_article2.default.getArticle, 'query'), _article.default.getArticleAxios);
+router.post('/', // validationHandle.validate(articleDto.createSchema, 'body'),
+_validationHandle.default.validator(_article2.default.createArticle, 'body'), _article.default.createArticleAxios);
 router.put("/like/:id", _article.default.likeArticle);
 var _default = router;
 exports.default = _default;

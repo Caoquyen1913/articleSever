@@ -5,13 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _express = _interopRequireDefault(require("express"));
+
 var _user = _interopRequireDefault(require("./user.controller"));
 
 var _user2 = _interopRequireDefault(require("./user.dto"));
 
 var _validationHandle = _interopRequireDefault(require("../../utils/validationHandle"));
-
-var _express = _interopRequireDefault(require("express"));
 
 var _user3 = _interopRequireDefault(require("./user.middleware"));
 

@@ -3,7 +3,7 @@ import { HttpStatusCode } from '../const/httpCode';
 import responseHandle from './responseHandle';
 
 const validate = (schema, reqType) => {
-  return function (req, res, next) {
+  return function valid(req, res, next) {
     try {
       let result = {};
       switch (reqType) {
@@ -24,30 +24,36 @@ const validate = (schema, reqType) => {
         // err.statusCode = 400;
         // return next(err);
         return res.json({
-          error: result.error
-        })
+          error: result.error,
+        });
       }
 
       return next();
     } catch (error) {
-      next(error);
+      return responseHandle.send(res, HttpStatusCode.INTERNAL_SERVER, {
+        errors: [
+          {
+            error: error.message,
+          },
+        ],
+      });
     }
   };
 };
 const validator = (schema, reqType) => {
-  return function (req, res, next) {
+  return function valid(req, res, next) {
     try {
       let result = {};
       switch (reqType) {
         case 'body':
-          result = new Validator(req.body,schema);
+          result = new Validator(req.body, schema);
           req.body = result.input;
           break;
         case 'params':
-          result = new Validator(req.params,schema);
+          result = new Validator(req.params, schema);
           break;
         default:
-          result = new Validator(req.query,schema);
+          result = new Validator(req.query, schema);
           req.query = result.input;
           break;
       }
@@ -55,26 +61,26 @@ const validator = (schema, reqType) => {
         // const err = new Error(result.error);
         // err.statusCode = 400;
         // return next(err);
-        return responseHandle.send(res, HttpStatusCode.BAD_REQUEST,{
+        return responseHandle.send(res, HttpStatusCode.BAD_REQUEST, {
           errors: [
             {
-              error: result.errors
-            }
-          ]
-        })
+              error: result.errors,
+            },
+          ],
+        });
       }
       return next();
     } catch (error) {
-      return responseHandle.send(res, HttpStatusCode.INTERNAL_SERVER,{
+      return responseHandle.send(res, HttpStatusCode.INTERNAL_SERVER, {
         errors: [
           {
-            error: error.message
-          }
-        ]
-      })
+            error: error.message,
+          },
+        ],
+      });
     }
   };
 };
 export default {
-    validate, validator
-}
+  validate, validator,
+};
