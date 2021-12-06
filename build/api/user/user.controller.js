@@ -5,8 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _bcrypt = _interopRequireDefault(require("bcrypt"));
-
 var _user = _interopRequireDefault(require("./user.model"));
 
 var _responseHandle = _interopRequireDefault(require("../../utils/responseHandle"));
@@ -29,12 +27,12 @@ const signIn = async (req, res) => {
       name,
       username,
       password
-    } = req.body;
-    const hashPassword = await _bcrypt.default.hash(password, saltRounds);
+    } = req.body; // const hashPassword = await bcrypt.hash(password, saltRounds);
+
     const user = await _user.default.create({
       name,
       username,
-      password: hashPassword,
+      password: password,
       isActive: true
     });
     user.password = undefined;

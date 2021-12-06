@@ -21,6 +21,7 @@ router.get('/me', _article.default.getArticleOfMeAxios);
 router.get('/', _validationHandle.default.validator(_article2.default.getArticle, 'query'), _article.default.getArticleAxios);
 router.post('/', // validationHandle.validate(articleDto.createSchema, 'body'),
 _validationHandle.default.validator(_article2.default.createArticle, 'body'), _article.default.createArticleAxios);
+router.post("/mongo", _article.default.create);
 router.put("/like/:id", _article.default.likeArticle);
 var _default = router;
 exports.default = _default;

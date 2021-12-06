@@ -12,6 +12,8 @@ var _cors = _interopRequireDefault(require("cors"));
 
 var _path = _interopRequireDefault(require("path"));
 
+var _mongoose = _interopRequireDefault(require("./config/mongoose.config"));
+
 require("./cronJobs");
 
 var _responseHandle = _interopRequireDefault(require("./utils/responseHandle"));
@@ -27,7 +29,6 @@ var _rateLimit = require("./config/rateLimit.config");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import favicon from 'serve-favicon';
-// import mongooseConfig from './config/mongoose.config';
 _dotenv.default.config(); // let compiler = webpack(configuration);
 // new webpack.ProgressPlugin().apply(compiler);
 // compiler.run(function (err, stats) {
@@ -73,7 +74,7 @@ app.use('/docs', _docApi.default); // app.all('*', async(req, res) => {
 
 const host = "0.0.0.0";
 app.listen(PORT, host, async () => {
-  // await mongooseConfig.mongoConnect();
+  await _mongoose.default.mongoConnect();
   console.log('run port:', PORT);
 }); // });
 //# sourceMappingURL=index.js.map
