@@ -26,8 +26,8 @@ services:
     restart: always
     networks:
       - sv-networks
-    ports:
-      - 27017:27017
+    # ports:
+    #   - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: abc123
